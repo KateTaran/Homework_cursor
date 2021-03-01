@@ -17,3 +17,14 @@ from functools import reduce
 num1 = reduce(lambda x, y: x + y, lst_to_sort)
 print(num1)
 
+lst_filer = list(filter(lambda x: (x % 2 == 1), lst_to_sort))
+print(lst_filer)
+
+b = range(-10, 10)
+list_filter1 = list(filter(lambda x: x < 0, b))
+print(list_filter1)
+
+list_1 = [1,2,3,5,7,9]
+list_2 = [2,3,5,6,7,8]
+list_3 = list(filter(lambda x: x in list_1, list_2))
+print(list_3)
