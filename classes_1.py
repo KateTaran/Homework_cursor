@@ -65,7 +65,7 @@ class City:
 
 #9. Override a printable string representation of the City class and return: The population of the city {name} is {population}
 def __str__(self):
- return(f'The population of the city {self.name} is {self.population}')
+return(f'The population of the city {self.name} is {self.population}')
 
 #10*. Override magic method __add__() to perform the additional action as 'multiply' (*) the value which is greater than 10. And perform this add (+) of two instances.
 class Mult:
