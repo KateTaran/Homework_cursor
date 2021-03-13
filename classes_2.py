@@ -25,16 +25,13 @@ guitar = Guitar(guitarstring)
 #Note: this method should not take instance as first parameter.
 
 class Calc:
-    a = 4
-    def __init__(self):
-        pass
-    @classmethod
-    def add_nums(cls, b, c):
-        adding = cls.a + b + c
-        return adding
+
+    @staticmethod
+    def add_nums(a, b, c):
+       return a + b + c
 
 calc = Calc()
-print(Calc.add_nums(2, 3))
+print(Calc.add_nums(1, 2, 3))
 
 #4.
 """
@@ -98,7 +95,7 @@ class Concert:
 
 Concert.max_visitors_num = 50
 concert = Concert()
-concert.visitors_count = 38
+concert.visitors_count = 1000
 print(concert.visitors_count)
 
 #6.
@@ -152,7 +149,8 @@ class Person:
     country = "USA"
 
 person = Person()
-Person.age = 54
+#Person.age = 54
+setattr(person, "age", 54)
 print(person.age)
 
 #10.
