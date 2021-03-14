@@ -78,9 +78,10 @@ print(pasta_4.ingredients)
         print(concert.visitors_count)  # 50
     """
 class Concert:
+    max_visitors_num = 0
+
     def __init__(self,  visitors_count=0):
-        self._visitors_count = visitors_count
-        max_visitors_num = 0
+        self.visitors_count = visitors_count
 
     @property
     def visitors_count(self):
@@ -94,8 +95,8 @@ class Concert:
             self._visitors_count = visitors
 
 Concert.max_visitors_num = 50
-concert = Concert()
-concert.visitors_count = 1000
+concert = Concert(1000)
+#concert.visitors_count = 38
 print(concert.visitors_count)
 
 #6.
