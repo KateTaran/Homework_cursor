@@ -1,8 +1,8 @@
 import dataclasses
 from abc import ABC, abstractmethod
 
-VEGETABLES = []
-FRUITS = []
+VEGETABLES = ['Red_tomato']
+FRUITS = ['Golden']
 
 states = {'nothing': 0, 'flowering': 1, 'green': 2, 'red': 3, 'rotten': 4}
 
@@ -245,3 +245,34 @@ class StarGardener(Gardener):
                 if plant.state == 3:
                     return True
                 return False
+
+class RealPests(Pests):
+    def __init__(self, pests_type, quantity):
+        super().__init__(pests_type, quantity)
+        self.pests_type = pests_type
+        self.quantity = quantity
+
+    def eat(self):
+        for all_plants in StarGardener.plants:
+            for plant in all_plants:
+                if plant.state == 2 and plant.state == 3:
+                    return True
+                else:
+                    return False
+
+
+
+    # Creating list of instances for vegetables and fruits, pests and gardener
+tomato_bush = TomatoBush(4)
+apple_tree = AppleTree(3)
+pests = Pests('worm', 10)
+tom = StarGardener('Tom', [tomato_bush, apple_tree])
+    # creating only one garden instance with vegetables and fruits
+garden = Garden(vegetables=tomato_bush.tomatoes, fruits=apple_tree.apples, pests=pests, gardener=tom)
+garden.show_the_garden()
+state = tom.check_states()
+    # if not state:
+    #     gardener.handling()
+for i in range(3):
+    tom.handling()
+tom.harvest()
