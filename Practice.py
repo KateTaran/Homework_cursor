@@ -4,8 +4,7 @@ from abc import ABC, abstractmethod
 VEGETABLES = ['Red_tomato']
 FRUITS = ['Golden']
 
-states = {'nothing': 0, 'flowering': 1, 'green': 2, 'red': 3, 'rotten': 4}
-
+states = {0: 'nothing', 1: 'flowering', 2: 'green', 3: 'red', 4: 'rotten'}
 
 class GardenMetaClass(type):
     _instances = {}
@@ -15,7 +14,6 @@ class GardenMetaClass(type):
             instance = super().__call__(*args, **kwargs)
             cls._instances[cls] = instance
         return cls._instances[cls]
-
 
 class Garden(metaclass=GardenMetaClass):
     def __init__(self, vegetables, fruits, pests, gardener):
@@ -30,7 +28,6 @@ class Garden(metaclass=GardenMetaClass):
         print(f'And such pests: {self.pests}')
         print(f'The maintainer of the garden is {self.gardener}')
 
-
 @dataclasses.dataclass()
 class PlantsStates:
     nothing: int
@@ -39,12 +36,11 @@ class PlantsStates:
     red: int
     rotten: int
 
-
 class Vegetables(ABC):
     def __init__(self, states, vegetable_type, name):
         self.states = states
         self.vegetable_type = vegetable_type
-        self.name = name
+        self.name = name\
 
     @property
     def vegetable_type(self):
@@ -65,7 +61,6 @@ class Vegetables(ABC):
     @abstractmethod
     def is_ripe(self):
         raise NotImplementedError('Your method is not implemented.')
-
 
 class Fruit(ABC):
     def __init__(self, states, fruits_type, name):
@@ -94,7 +89,6 @@ class Fruit(ABC):
     def is_ripe(self):
         raise NotImplementedError('The method is missing.')
 
-
 class Gardener(ABC):
     def __init__(self, name, plants):
         self.name = name
@@ -116,7 +110,6 @@ class Gardener(ABC):
     def check_states(self):
         raise NotImplementedError('The method is missing.')
 
-
 class Pests(ABC):
     def __init__(self, pests_type, quantity):
         self.pests_type = pests_type
@@ -125,7 +118,6 @@ class Pests(ABC):
     @abstractmethod
     def eat(self):
         raise NotImplementedError('The method is missing.')
-
 
 class Tomato(Vegetables):
     def __init__(self, index, vegetable_type, states, name):
@@ -148,12 +140,15 @@ class Tomato(Vegetables):
         self.print_state()
 
     def print_state(self):
-        print(f'{self.vegetable_type} {self.index} is {self.state}')
+        print(f'{self.vegetable_type} {self.index} is {self.states.get(self.state)}')
 
+    def __repr__(self):
+        return f'{self.vegetable_type} {self.index} is {self.states.get(self.state)}'
 
 class TomatoBush:
     def __init__(self, num):
-        self.tomatoes = [Tomato(index, 'Red_tomato', states, 'Cherry') for index in range(0, num - 1)]
+        self.tomatoes = [Tomato(index, 'Red_tomato', states, 'Cherry') for index in range(1, num + 1)]
+        self.state = 0
 
     def grow_all(self):
         for tomato in self.tomatoes:
@@ -169,7 +164,6 @@ class TomatoBush:
 
     def provide_harvest(self):
         self.tomatoes = []
-
 
 class Apple(Fruit):
     def __init__(self, index, fruits_type, states, name):
@@ -192,12 +186,15 @@ class Apple(Fruit):
         self.print_state()
 
     def print_state(self):
-        print(f'{self.fruits_type} {self.index} is {self.state}')
+        print(f'{self.fruits_type} {self.index} is {self.states.get(self.state)}')
 
+    def __repr__(self):
+        return f'{self.fruits_type} {self.index} is {self.states.get(self.state)}'
 
 class AppleTree:
     def __init__(self, num):
-        self.apples = [Apple(index, 'Golden', states, 'King') for index in range(0, num - 1)]
+        self.apples = [Apple(index, 'Golden', states, 'King') for index in range(1, num + 1)]
+        self.state = 0
 
     def grow_all(self):
         for apple in self.apples:
@@ -213,7 +210,6 @@ class AppleTree:
 
     def provide_harvest(self):
         self.apples = []
-
 
 class StarGardener(Gardener):
     def __init__(self, name, plants):
@@ -231,48 +227,56 @@ class StarGardener(Gardener):
                 print('Too early! Your plants is not ripe.')
 
     def handling(self):
-        print('Gardner is working...')
+        print('Gardener is working...')
         for plant in self.plants:
             plant.grow_all()
-        print('Gardner is finished')
+        print('Gardener is finished')
 
     def poison_pests(self):
-        pass
+        pests.quantity //= 2
 
     def check_states(self):
         for all_plants in self.plants:
-            for plant in all_plants:
-                if plant.state == 3:
-                    return True
-                return False
+            if all_plants.state == 3:
+                return True
+            return False
+
+    def __repr__(self):
+        return f'{self.name}'
 
 class RealPests(Pests):
     def __init__(self, pests_type, quantity):
-        super().__init__(pests_type, quantity)
+        super(RealPests, self).__init__(pests_type, quantity)
         self.pests_type = pests_type
         self.quantity = quantity
 
     def eat(self):
-        for all_plants in StarGardener.plants:
-            for plant in all_plants:
-                if plant.state == 2 and plant.state == 3:
-                    return True
-                else:
-                    return False
+        for pest in range(self.quantity):
+            tomato_bush.tomatoes.pop()
+            if len(tomato_bush.tomatoes) == 0:
+                print("In the Garden have no vegetables")
 
+        for pest in range(self.quantity):
+            apple_tree.apples.pop()
+            if len(apple_tree.apples) == 0:
+                print("In the Garden have no fruits")
 
+    def __repr__(self):
+        return f'{self.pests_type} is {self.quantity}'
 
-    # Creating list of instances for vegetables and fruits, pests and gardener
-tomato_bush = TomatoBush(4)
-apple_tree = AppleTree(3)
-pests = Pests('worm', 10)
+        # Creating list of instances for vegetables and fruits, pests and gardener
+tomato_bush = TomatoBush(9)
+apple_tree = AppleTree(8)
 tom = StarGardener('Tom', [tomato_bush, apple_tree])
-    # creating only one garden instance with vegetables and fruits
-garden = Garden(vegetables=tomato_bush.tomatoes, fruits=apple_tree.apples, pests=pests, gardener=tom)
-garden.show_the_garden()
+# creating only one garden instance with vegetables and fruits
 state = tom.check_states()
-    # if not state:
-    #     gardener.handling()
 for i in range(3):
     tom.handling()
+pests = RealPests('worm', 10)
+tom.poison_pests()
+pests.eat()
+garden = Garden(vegetables=tomato_bush.tomatoes, fruits=apple_tree.apples, pests=pests, gardener=tom)
+garden.show_the_garden()
+# if not state:
+# gardener.handling()
 tom.harvest()
