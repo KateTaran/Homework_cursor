@@ -1,6 +1,9 @@
 from math import sqrt
 import logging
+import time
+import random
 
+#1.
 log_template = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logging.basicConfig(level=logging.INFO, filename='test.log', filemode='w', format=log_template)
 while True:
@@ -53,12 +56,74 @@ sqrt for square root
     elif operation == "**":
         print(f'{num_1} ** {num_2} = ', num_1 ** num_2)
     elif operation == "sqrt":
-        # num_2 not input
         print(f' sqrt {num_1}  = ', sqrt(num_1))
     elif operation == "%":
         print(f'{num_1} % of {num_2} = ', num_2/100*num_1)
     else:
         break
 
+
+# 2.
+class LowBattery(Exception):
+    pass
+
+
+class EmptyBattery(Exception):
+    pass
+
+
+class NoWater(Exception):
+    pass
+
+
+class OverflowGarbageCan(Exception):
+    pass
+
+
+class Robot_cleaner:
+    battery_discharge = 5
+    def __init__(self, battery_charge, filling_garbage_can, amount_of_water):
+        self.battery_charge = battery_charge
+        self.filling_garbage_can = filling_garbage_can
+        self.amount_of_water = amount_of_water
+
+    def move(self):
+        while True:
+            time.sleep(1)
+            try:
+                print(f'Robot cleaner moves, battery level: {self.battery_charge}')
+                self.battery_charge -= self.battery_discharge
+                if self.battery_charge <= 20:
+                    if self.battery_charge == 0:
+                        raise EmptyBattery
+                    raise LowBattery
+            except LowBattery:
+                print(f'Warning! Battery level: {self.battery_charge}')
+            except EmptyBattery:
+                print(f'Battery is discharged')
+                break
+
+    def wash(self):
+        if self.amount_of_water <= 0:
+            raise NoWater
+        else:
+            print('Washing')
+            self.amount_of_water = max(self.amount_of_water - random.randint(1, 10), 0)
+            print(f"Water level: {self.amount_of_water}")
+
+
+    def vacuum_cleaner(self):
+        if self.filling_garbage_can >= 100:
+            print(f"Garbage level: {self.filling_garbage_can}")
+            raise OverflowGarbageCan
+        else:
+            print('Vacuum cleaning')
+            print(f"Garbage level: {self.filling_garbage_can}")
+            self.filling_garbage_can = min(self.filling_garbage_can + random.randint(10, 22), 100)
+
+robot = Robot_cleaner(100, 0, 100)
+robot.move()
+robot.wash()
+            
 
 
